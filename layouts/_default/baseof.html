@@ -8,9 +8,15 @@
 	<title>{{ .Title }}</title>
 	{{ with .Site.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
 	{{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
-	<link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
-	{{ range .Site.Params.customCSS -}}
-		<link rel="stylesheet" href="{{ . | relURL }}?rnd={{ now.Unix }}">
+	<!-- Load the main stylesheet. -->
+        {{ $style := (resources.Get "css/style.css" | resources.Minify) }}
+        <link
+            rel="stylesheet"
+            href="{{ $style.Permalink }}?cb={{ now.Unix }}"
+            integrity="{{ $style.Data.Integrity }}" />
+
+        {{ range .Site.Params.customCSS -}}
+	<link rel="stylesheet" href="{{ . | relURL }}?rnd={{ now.Unix }}">
 	{{- end }}
 	{{ with .OutputFormats.Get "RSS" -}}
 		{{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}

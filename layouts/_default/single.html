@@ -2,14 +2,44 @@
 	<main>
 		<article>
 			<h1>{{ .Title }}</h1>
-			<b><time>{{ .Date.Format (default "2006-01-02 15:04:05" .Site.Params.dateFmt) }}</time></b>
-		       {{ range .Params.tags }}
-		           <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
-        	       {{ end }}
-
-			<div>
-				{{ .Content }}
-			</div>
+                        {{ if or .Date .Params.tags .Params.categories }}
+                        <p>
+                            <b>
+                                Posted
+                                {{ if .Date }}
+                                on <time>{{ .Date.Format (default "2006-01-02 15:04:05" .Site.Params.dateFmt) }}</time>
+                                {{ end }}
+                                {{ with .Params.categories }}
+                                in
+                                {{ range first 1 . }}
+                                <a href="{{ "/categories/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+                                {{- end -}}
+                                {{- range after 1 . -}}
+                                , <a href="{{ "/categories/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+                                {{- end -}}
+                                {{ end }}
+                            </b>
+                            {{ with .WordCount }}
+                            • {{ . }} words
+                            {{ end }}
+                            {{ with .ReadingTime }}
+                            • {{ . }} minute read
+                            {{ end }}
+                            {{ with .Params.tags }}
+                            <br>
+                            Tags:
+                            {{ range first 1 . }}
+                            <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+                            {{- end -}}
+                            {{- range after 1 . -}}
+                            , <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+                            {{- end -}}
+                            {{ end }}
+                        </p>
+                        {{ end }}
+                        <div>
+	                    {{ .Content }}
+                        </div>
 		</article>
 	</main>
 {{ partial "sidebar.html" . }}

@@ -3,5 +3,6 @@
 	{{- range .Site.Menus.footer }}
 	<a href="{{ .URL }}"><b>{{ .Name }}</b></a>.
         {{- end }}
+        {{ with .OutputFormats.Get "RSS" }}<a href="{{ .RelPermalink }}"><b>RSS.</b></a>{{ end }}
 	</p>
 </footer>
