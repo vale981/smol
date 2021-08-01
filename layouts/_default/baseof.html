@@ -5,9 +5,33 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<style type=text/css>body{font-family:monospace;}</style>
-	<title>{{ .Title }}</title>
-	{{ with .Site.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
-	{{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
+
+        <!-- Page Metadata -->
+        {{ if (eq .Title .Site.Title) }}
+        {{ with $title := .Title }}
+        <title>{{ . }}</title>
+        <meta property="og:title" content="{{ . }}"/>
+        {{ end }}
+        {{ else }}
+        {{ with $title := printf "%s - %s" .Title .Site.Title }}
+        <title>{{ . }}</title>
+        <meta property="og:title" content="{{ . }}"/>
+        {{ end }}
+        {{ end }}
+        {{ with .Site.Params.description }}
+        <meta name="description" content="{{ . }}" />
+        <meta property="og:description" content="{{ . }}"/>
+        {{ end }}
+        {{ with .Site.Params.author }}
+        <meta name="author" content="{{ . }}" />
+        {{ end }}
+        <meta property="og:site_name" content="{{ .Site.Title }}"/>
+        <meta property="og:type" content="blog"/>
+        <meta property="og:url" content="{{ .Site.BaseURL }}"/>
+        {{ with .Site.Params.logo }}
+        <meta property="og:image" content="{{ . }}">
+        {{ end }}
+
 	<!-- Load the main stylesheet. -->
         {{ $style := (resources.Get "css/style.css" | resources.Minify) }}
         <link
