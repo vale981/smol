@@ -80,7 +80,7 @@ img {
 figcaption {
     color: #888;
     font: 12px/1.5 monospace;
-    text-align: center;
+    text-align: left ;
 }
 
 figure {
