@@ -80,9 +80,11 @@ img {
 figcaption {
     color: #888;
     font: 12px/1.5 monospace;
-    text-align: left ;
+    text-align: center;
 }
 
 figure {
-    margin: auto
+    margin: auto;
+    text-align: center;
+    display: inline-block;
 }
